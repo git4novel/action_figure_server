@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
 require("dotenv").config();
 
 // ---------
@@ -31,11 +31,24 @@ async function run() {
     // --for any error down line need to be comment 
     await client.connect();
     //--------------------------------
+    const toysCollection = client.db('toyDB').collection('toys')
+    const allToyCollection = client.db('AllToyDB').collection('toy')
 
+
+    // data read by get operation
+    app.get('/mytoy', async(req, res) =>{
+      const cursor = toysCollection.find()
+      const result = await cursor.toArray();
+      res.send(result)
+    })
 
     // create data with post method
-    
-
+    app.post('/addAToy', async(req, res) =>{
+      const toy = req.body;
+      const result = await toysCollection.insertOne(toy);
+      res.send(result);
+    })
+    // for deleting use delete
 
 
     //---------------------------------
