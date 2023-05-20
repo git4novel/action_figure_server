@@ -9,8 +9,15 @@ const port = process.env.PORT || 5000;
 
 
 // middleware
-app.use(cors())
+/* const corsConfig = {
+  origin: '',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
+}
+app.use(cors(corsConfig))
+app.options("", cors(corsConfig)) */
 app.use(express.json())
+app.use(cors())
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gqha5r5.mongodb.net/?retryWrites=true&w=majority`;
@@ -29,7 +36,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     
     // --for any error down line need to be comment 
-    await client.connect();
+    // await client.connect();
     //--------------------------------
     const toysCollection = client.db('toyDB').collection('toys')
     const allToyCollection = client.db('AllToyDB').collection('toy')
@@ -72,7 +79,11 @@ async function run() {
 
     // data read by get operation
     app.get('/mytoy', async(req, res) =>{
-      const cursor = toysCollection.find()
+      let query = {}
+      if(req.query?.email){
+        query = {email: req.query.email}
+      }
+      const cursor = toysCollection.find(query)
       const result = await cursor.toArray();
       res.send(result)
     })
