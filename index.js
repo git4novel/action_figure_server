@@ -31,8 +31,6 @@ async function run() {
     // await client.connect();
     //--------------------------------
     const toysCollection = client.db('toyDB').collection('toys')
-    const allToyCollection = client.db('AllToyDB').collection('toy')
-
 
 
     // get single data based on id
@@ -70,15 +68,18 @@ async function run() {
 
 
     // data read by get operation
-    app.get('/mytoy', async(req, res) =>{
-      let query = {}
-      if(req.query?.email){
-        query = {email: req.query.email}
+    app.get('/mytoy', async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
       }
-      const cursor = toysCollection.find(query)
+    
+      const limit = 20; // Set the limit to 20 items
+    
+      const cursor = toysCollection.find(query).limit(limit);
       const result = await cursor.toArray();
-      res.send(result)
-    })
+      res.send(result);
+    });
 
     // create data with post method
     app.post('/addAToy', async(req, res) =>{
