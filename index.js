@@ -44,6 +44,14 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result)
     })
+    // get by id in category toy
+    app.get('/categorytoy/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await categoryToy.findOne(query)
+      res.send(result);
+
+    })
 
 
     // get single data based on id
