@@ -31,6 +31,19 @@ async function run() {
     // await client.connect();
     //--------------------------------
     const toysCollection = client.db('toyDB').collection('toys')
+    const categoryToy = client.db('categoryDB').collection('toy');
+
+
+    // app.get for finding 6 data for react tabs
+    app.get('/categoryToy', async(req, res) =>{
+      let query = {};
+      if (req.query?.category) {
+        query = { category: req.query.category };
+      }
+      const cursor = categoryToy.find(query)
+      const result = await cursor.toArray();
+      res.send(result)
+    })
 
 
     // get single data based on id
@@ -80,6 +93,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    // create data for categorytab
+    app.post('/addAToy', async(req, res) =>{
+      const toy = req.body;
+      const result = await categoryToy.insertOne(toy);
+      res.send(result);
+    })
 
     // create data with post method
     app.post('/addAToy', async(req, res) =>{
