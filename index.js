@@ -102,12 +102,7 @@ async function run() {
       res.send(result);
     });
 
-    // create data for categorytab
-    app.post('/addAToy', async(req, res) =>{
-      const toy = req.body;
-      const result = await categoryToy.insertOne(toy);
-      res.send(result);
-    })
+  
 
     // create data with post method
     app.post('/addAToy', async(req, res) =>{
